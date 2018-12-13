@@ -20,6 +20,11 @@ public class GameServer {
 		this.port = port;
 	}
 
+	public static void main(String[] args) {
+		new GUI();
+		GameServer s = new GameServer(8888);
+		s.start();
+	}
 	private ActionListener broadcastListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("ready")) {
@@ -30,6 +35,8 @@ public class GameServer {
 					int randombutton = random_waittime.nextInt(1) + 15;
 					randombuttonarray[j] = randombutton;
 				}
+
+
 				for (GamePlayer gp : clients) {
 
 					gp.send("" + randomTime);
@@ -37,6 +44,9 @@ public class GameServer {
 					gp.send("" + randombuttonarray[0] + "," + randombuttonarray[1] + "," + randombuttonarray[2] + ","
 							+ randombuttonarray[3]);
 					System.out.println("" + randombuttonarray[0]);
+
+
+
 				}
 			} else if (e.getActionCommand().equals("finished")) {
 				// sende Nachricht an alle clients
