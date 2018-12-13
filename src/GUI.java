@@ -19,6 +19,15 @@ public class GUI extends JFrame {
     protected Timestamp timestamp;
     private RandomTimer timer;
 
+
+    public static void main(String[] args) {
+
+
+        new GUI();
+    }
+
+
+
     public GUI() {
         this.setTitle("Button-Game");
         this.setSize(500, 500);
