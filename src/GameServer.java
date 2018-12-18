@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class GameServer {
     private int port;
-    private boolean running = false;
+    protected boolean running = false;
     private boolean clientready = false;
     private int clientreadycounter = 0;
 

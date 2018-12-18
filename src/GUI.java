@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -14,19 +15,21 @@ public class GUI extends JFrame {
     private JLabel timeLabel = new JLabel();
     private JButton startButton = new JButton("START");
     private JButton stopButton = new JButton("EXIT");
+    private JButton multiplayer = new JButton("Multiplayer");
+    private JPanel westPanel;
+    private JLabel hostlabel = new JLabel("Host");
+    private JTextField textfield = new JTextField("          ");
     protected List<JButton> buttonList = new ArrayList<>();
     protected List<Integer> actualButtonList = new ArrayList<>();
     protected Timestamp timestamp;
     private RandomTimer timer;
-
+    private Client c;
+    private GameServer s;
 
     public static void main(String[] args) {
 
-
         new GUI();
     }
-
-
 
     public GUI() {
         this.setTitle("Button-Game");
@@ -35,7 +38,11 @@ public class GUI extends JFrame {
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
 
+        c = new Client("localhost",8888);
+
         startButton.setBackground(Color.GREEN);
+
+        //ButtonEnable();
 
         GenerateButton();
 
@@ -43,9 +50,14 @@ public class GUI extends JFrame {
         timePanel.add(timeLabel, BorderLayout.NORTH);
         timePanel.add(stopButton, BorderLayout.SOUTH);
 
+        westPanel = new JPanel(new BorderLayout());
+        westPanel.add(hostlabel, BorderLayout.WEST);
+        westPanel.add(textfield, BorderLayout.EAST);
+
         this.add(startButton, BorderLayout.NORTH);
         this.add(buttonPanel, BorderLayout.CENTER);
         this.add(timePanel, BorderLayout.SOUTH);
+        this.add(westPanel, BorderLayout.WEST);
 
         addAllActionListeners();
         this.setVisible(true);
@@ -105,4 +117,14 @@ public class GUI extends JFrame {
     private void StopGame(){
         System.exit(0);
     }
-}
+
+    /*private void ButtonEnable(){
+        startButton.setEnabled(false);
+        if(s.running == true) {
+            startButton.setEnabled(true);
+        }
+            else{
+                startButton.setEnabled(false);
+            }
+        }*/
+    }
