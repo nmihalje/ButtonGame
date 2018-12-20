@@ -56,15 +56,15 @@ public class GameServer {
                 clientreadycounter++;
                 int indicator = conns.indexOf(connection);
 
-                if(Integer.valueOf(indicator) != null) {
-                    for(int i = 0; i < conns.size(); i++){
-                        if(i != indicator){
+                if (Integer.valueOf(indicator) != null) {
+                    for (int i = 0; i < conns.size(); i++) {
+                        if (i != indicator) {
                             conns.get(i).sendMessage("partner is ready!");
                         }
                     }
 
                 }
-                if(clientreadycounter == conns.size()) {
+                if (clientreadycounter == conns.size()) {
                     int randomTime = random_waittime.nextInt(4000) + 2000;
                     for (int j = 0; j <= 3; j++) {
                         int randombutton = random_waittime.nextInt(1) + 15;
@@ -84,10 +84,6 @@ public class GameServer {
                     }
 
                 }
-
-
-
-
 
             } else if (e.getActionCommand().equals("finished")) {
                 // sende Nachricht an alle clients

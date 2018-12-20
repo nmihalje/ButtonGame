@@ -60,7 +60,6 @@ public class GamePlayer {
                 e.printStackTrace();
             }
         }
-
     }
 
     //gets a message from a player
@@ -87,6 +86,5 @@ public class GamePlayer {
         } else {
             return started;
         }
-
     }
 }
