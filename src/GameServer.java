@@ -14,7 +14,6 @@ public class GameServer {
     private int clientreadycounter = 0;
 
     Random random_waittime = new Random();
-    Random random_buttons = new Random();
     int[] randombuttonarray;
 
     private ArrayList<GamePlayer> clients = new ArrayList<>();
@@ -62,8 +61,8 @@ public class GameServer {
                             conns.get(i).sendMessage("partner is ready!");
                         }
                     }
-
                 }
+
                 if (clientreadycounter == conns.size()) {
                     int randomTime = random_waittime.nextInt(4000) + 2000;
                     for (int j = 0; j <= 3; j++) {
@@ -79,12 +78,8 @@ public class GameServer {
                         gp.send("" + randombuttonarray[0] + "," + randombuttonarray[1] + "," + randombuttonarray[2] + ","
                                 + randombuttonarray[3]);
                         System.out.println("" + randombuttonarray[0]);
-
-
                     }
-
                 }
-
             } else if (e.getActionCommand().equals("finished")) {
                 // sende Nachricht an alle clients
                 // die dem Server derzeit bekannt sind
@@ -93,10 +88,8 @@ public class GameServer {
                         gp.send("you lose");
                     }
                 }
-
                 ((GamePlayer) e.getSource()).send("you win");
             }
-
         }
     };
 
@@ -108,16 +101,14 @@ public class GameServer {
                 try (ServerSocket server = new ServerSocket(GameServer.this.port)) {
                     while (running) {
                         Socket client = server.accept(); // Server bleibt solange hier stehen bis
-                        // dass sich 1Client verbunden hat
+                        //dass sich Client verbunden hat
                         GamePlayer p = new GamePlayer(client);
                         System.out.println("connected");
 
                         p.addActionListener(broadcastListener);
-
                         clients.add(p);
                     }
                 } catch (Exception e) {
-
                 }
             }
         };
