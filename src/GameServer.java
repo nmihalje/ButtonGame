@@ -102,11 +102,11 @@ public class GameServer {
                     while (running) {
                         Socket client = server.accept(); // Server bleibt solange hier stehen bis
                         //dass sich Client verbunden hat
-                        GamePlayer p = new GamePlayer(client);
+                        GameConnection connection = new GameConnection(client);
                         System.out.println("connected");
 
-                        p.addActionListener(broadcastListener);
-                        clients.add(p);
+                        connection.addActionListener(broadcastListener);
+                        conns.add(connection);
                     }
                 } catch (Exception e) {
                 }

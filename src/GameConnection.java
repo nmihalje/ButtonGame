@@ -100,10 +100,6 @@ public class GameConnection {
         }).start();
     }
 
-    public void addMessageListener(ActionListener l) {
-        listeners.add(l);
-    }
-
     public void addActionListener(ActionListener actionListener) {
         listeners.add(actionListener);
     }
