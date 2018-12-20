@@ -2,16 +2,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Client {
     private int port;
     private String host;
     private GameConnection connection;
     private GUI g;
-    protected List<Integer> actualButtonList = new ArrayList<>();
-
 
     public Client(String host, int port) {
         this.host = host;
@@ -21,7 +17,7 @@ public class Client {
     public void start(GUI gui) {
         g = gui;
         try {
-            connection = new GameConnection(new Socket(host, port));
+            connection = new GameConnection(new Socket(g.host, g.port));
             connection.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {

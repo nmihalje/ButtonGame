@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Timestamp;
 
 public class RandomTimer extends Thread {
     private GUI buttongame;
@@ -27,7 +26,6 @@ public class RandomTimer extends Thread {
                 selectedButton.setBackground(Color.GREEN);
             }
         }
-        buttongame.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
     public void setCallBack(GUI game){

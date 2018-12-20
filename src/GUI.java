@@ -1,33 +1,30 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.sql.Timestamp;
 
 public class GUI extends JFrame {
 
     private int x;
+    protected int port;
+    protected String host;
     private boolean startButtonClick = true;
     protected boolean buttonClicked = false;
-    private JPanel buttonPanel = new JPanel(new GridLayout(4, 4));;
-    private JPanel timePanel;
-    private JLabel timeLabel = new JLabel();
-    private JButton startButton = new JButton("START");
-    private JButton stopButton = new JButton("EXIT");
-    private JButton multiplayer = new JButton("Multiplayer");
-    private JPanel westPanel;
+    private JPanel buttonPanel = new JPanel(new GridLayout(4, 4));
+    private JPanel northpanel = new JPanel();
     private JLabel hostlabel = new JLabel("Host");
-    private JTextField textfield = new JTextField("          ");
+    private JLabel portlabel = new JLabel("Port");
+    private JButton startButton = new JButton("START");
+    private JButton readyButton = new JButton("READY");
+    private JButton stopButton = new JButton("EXIT");
+
+    private JTextField textfield = new JTextField(10);
+    private JTextField textfield2 = new JTextField(4);
     protected List<JButton> buttonList = new ArrayList<>();
     protected List<Integer> actualButtonList = new ArrayList<>();
-    protected Timestamp timestamp;
     private RandomTimer timer;
-    private Client c;
-    private GameServer s;
 
     public static void main(String[] args) {
-
         new GUI();
     }
 
@@ -38,32 +35,22 @@ public class GUI extends JFrame {
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
 
-        c = new Client("localhost",8888);
-
         startButton.setBackground(Color.GREEN);
-
-        //ButtonEnable();
 
         GenerateButton();
 
-        timePanel = new JPanel(new BorderLayout());
-        timePanel.add(timeLabel, BorderLayout.NORTH);
-        timePanel.add(stopButton, BorderLayout.SOUTH);
+        northpanel.setLayout(new FlowLayout());
+        northpanel.add(startButton);
+        northpanel.add(hostlabel);
+        northpanel.add(textfield);
+        northpanel.add(portlabel);
+        northpanel.add(textfield2);
+        northpanel.add(readyButton);
 
-        westPanel = new JPanel(new BorderLayout());
-        westPanel.add(hostlabel, BorderLayout.WEST);
-        westPanel.add(textfield, BorderLayout.EAST);
-
-        this.add(startButton, BorderLayout.NORTH);
+        this.add(northpanel, BorderLayout.NORTH);
         this.add(buttonPanel, BorderLayout.CENTER);
-        this.add(timePanel, BorderLayout.SOUTH);
-        this.add(westPanel, BorderLayout.WEST);
+        this.add(stopButton, BorderLayout.SOUTH);
 
-        addAllActionListeners();
-        this.setVisible(true);
-    }
-
-    private void addAllActionListeners() {
         for (JButton button : buttonList) {
             button.addActionListener(ae -> {
                 button.setEnabled(false);
@@ -71,28 +58,45 @@ public class GUI extends JFrame {
                 x++;
                 if (x == actualButtonList.size()) {
                     x = 0;
-                    timeLabel.setText(((new Timestamp(System.currentTimeMillis())).getTime() - timestamp.getTime()) + " ms");
                     StartGame();
                 }
             });
         }
+
         startButton.addActionListener(ae -> {
             if (startButtonClick) {
                 startButtonClick = false;
                 StartGame();
                 startButton.setEnabled(false);
                 startButton.setBackground(null);
-                timeLabel.setText("Get ready!");
 
-            }  else if(!buttonClicked) {
+            } else if (!buttonClicked) {
                 StartGame();
-                timeLabel.setText("Get ready!");
             }
+        });
+
+        readyButton.addActionListener(a -> {
+            Client c = new Client(host, port);
+            if (host != null && port != 0) {
+                c.start(this);
+                c.sendMessage("is ready");
+                System.out.println("Connected Client is ready.");
+            }
+        });
+
+        textfield.addActionListener(e -> {
+            host = textfield.getText();
+        });
+
+        textfield2.addActionListener(e -> {
+            port = Integer.parseInt(textfield2.getText());
         });
 
         stopButton.addActionListener(ae -> {
             StopGame();
         });
+
+        this.setVisible(true);
     }
 
     private void GenerateButton() {
@@ -114,17 +118,7 @@ public class GUI extends JFrame {
         buttonClicked = true;
     }
 
-    private void StopGame(){
+    private void StopGame() {
         System.exit(0);
     }
-
-    /*private void ButtonEnable(){
-        startButton.setEnabled(false);
-        if(s.running == true) {
-            startButton.setEnabled(true);
-        }
-            else{
-                startButton.setEnabled(false);
-            }
-        }*/
-    }
+}
