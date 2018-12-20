@@ -12,7 +12,6 @@ public class GamePlayer {
      * Setup Server Connection
      */
     private boolean running = false;
-    private boolean started = false;
     private Socket connection;
 
     private DataInputStream receive;

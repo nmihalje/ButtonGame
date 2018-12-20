@@ -11,7 +11,6 @@ import java.util.Random;
 public class GameServer {
     private int port;
     protected boolean running = false;
-    private boolean clientready = false;
     private int clientreadycounter = 0;
 
     Random random_waittime = new Random();
@@ -19,6 +18,7 @@ public class GameServer {
     int[] randombuttonarray;
 
     private ArrayList<GamePlayer> clients = new ArrayList<>();
+    private ArrayList<GameConnection> conns = new ArrayList<>();
 
     public GameServer(int port) {
         this.port = port;
@@ -27,7 +27,7 @@ public class GameServer {
     public static void main(String[] args) {
         GameServer s = new GameServer(8888);
         s.start();
-        //Gets message from client back
+        // Gets message from client back
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String input = "";
         while (!input.equalsIgnoreCase("stop")) {
@@ -50,27 +50,45 @@ public class GameServer {
         public void actionPerformed(ActionEvent e) {
             System.out.println("Nachricht empfangen: " + e.getActionCommand());
             GameConnection connection = (GameConnection) e.getSource();
-            if (e.getActionCommand().equals("ready")) {
+            if (e.getActionCommand().contains("is ready")) {
+                System.out.println("Nachricht empfangen: " + e.getActionCommand());
+
                 clientreadycounter++;
+                int indicator = conns.indexOf(connection);
 
-                int randomTime = random_waittime.nextInt(4000) + 2000;
+                if(Integer.valueOf(indicator) != null) {
+                    for(int i = 0; i < conns.size(); i++){
+                        if(i != indicator){
+                            conns.get(i).sendMessage("partner is ready!");
+                        }
+                    }
 
-                for (int j = 0; j <= 3; j++) {
-                    int randombutton = random_waittime.nextInt(1) + 15;
-                    randombuttonarray[j] = randombutton;
+                }
+                if(clientreadycounter == conns.size()) {
+                    int randomTime = random_waittime.nextInt(4000) + 2000;
+                    for (int j = 0; j <= 3; j++) {
+                        int randombutton = random_waittime.nextInt(1) + 15;
+
+                        randombuttonarray[j] = randombutton;
+
+                    }
+                    for (GamePlayer gp : clients) {
+
+                        gp.send("" + randomTime);
+
+                        gp.send("" + randombuttonarray[0] + "," + randombuttonarray[1] + "," + randombuttonarray[2] + ","
+                                + randombuttonarray[3]);
+                        System.out.println("" + randombuttonarray[0]);
+
+
+                    }
+
                 }
 
 
-                for (GamePlayer gp : clients) {
-
-                    gp.send("" + randomTime);
-
-                    gp.send("" + randombuttonarray[0] + "," + randombuttonarray[1] + "," + randombuttonarray[2] + ","
-                            + randombuttonarray[3]);
-                    System.out.println("" + randombuttonarray[0]);
 
 
-                }
+
             } else if (e.getActionCommand().equals("finished")) {
                 // sende Nachricht an alle clients
                 // die dem Server derzeit bekannt sind
@@ -96,6 +114,7 @@ public class GameServer {
                         Socket client = server.accept(); // Server bleibt solange hier stehen bis
                         // dass sich 1Client verbunden hat
                         GamePlayer p = new GamePlayer(client);
+                        System.out.println("connected");
 
                         p.addActionListener(broadcastListener);
 
